@@ -96,13 +96,16 @@ figure {
   -webkit-box-shadow: inset 1px 1px 1px -1px rgba(0, 0, 0, 0.5), inset -1px -1px 1px -1px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: inset 1px 1px 1px -1px rgba(0, 0, 0, 0.5), inset -1px -1px 1px -1px rgba(0, 0, 0, 0.5);
   box-shadow: inset 1px 1px 1px -1px rgba(0, 0, 0, 0.5), inset -1px -1px 1px -1px rgba(0, 0, 0, 0.5);
-  -webkit-transition: all 1s ease-in-out;
-  -moz-transition: all 1s ease-in-out;
-  -o-transition: all 1s ease-in-out;
-  transition: all 1s ease-in-out;
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   -ms-transform-style: preserve-3d;
   -o-transform-style: preserve-3d;
   transform-style: preserve-3d;
+}
+/* line 28, ../sass/style.sass */
+.box.animated {
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
 }
