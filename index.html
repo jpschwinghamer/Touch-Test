@@ -1,0 +1,87 @@
+<html lang="en-US"><head>
+  <meta charset="UTF-8">
+  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link href="css/style.css" media="screen, projection" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <figure id="figure">
+    <i class="box"></i>
+  </figure>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+
+      var   $box = $('.box'),
+            startX,
+            startY,
+            currentX,
+            currentY,
+            deltaX,
+            deltaY,
+            angle,
+            direction,
+            rotateY = 0,
+            rotateX = 0;
+
+      // Touch start
+      $(document).live('touchstart', function(event){
+        event.preventDefault();
+        startX = event.originalEvent.touches[0].pageX;
+        startY = event.originalEvent.touches[0].pageY;
+      });
+
+      // Touch move
+      $(document).live('touchmove', function(event){
+        event.preventDefault();
+        currentX = event.originalEvent.touches[0].pageX;
+        currentY = event.originalEvent.touches[0].pageY;
+      });
+
+      // Touch end
+      $(document).live('touchend', function(event){
+        event.preventDefault();
+        calculateAngle();
+      });
+
+      // Calculate angle
+      function calculateAngle(){
+        deltaX = startX - currentX;
+        deltaY = startY - currentY;
+        angle = Math.round(Math.atan2(deltaY,deltaX) * 180/Math.PI); // Magic math!
+        angle < 0 ? angle = 360 - Math.abs(angle) : angle;
+        detectDirection(angle);
+      }
+
+      // Detect direction
+      function detectDirection(){
+        if((angle >= 0 && angle <= 45) || (angle <= 360 && angle >= 315)) {
+          console.log('left');
+          $box.css({'background' : 'blue', '-webkit-transform': 'rotateY(' + (rotateY-=180) + 'deg)'});
+        }
+
+        if(angle >= 135 && angle <= 225) {
+          console.log('right');
+          $box.css({'background' : 'green', '-webkit-transform': 'rotateY(' + (rotateY+=180) + 'deg)'})
+
+        }
+
+        if(angle >= 46 && angle <= 134) {
+          console.log('top');
+          $box.css({'background' : 'purple', '-webkit-transform': 'rotateX(' + (rotateY-=180) + 'deg)'})
+        }
+
+        if(angle >= 226 && angle <= 314) {
+          console.log('bottom');
+          $box.css({'background' : 'yellow', '-webkit-transform': 'rotateX(' + (rotateY+=180) + 'deg)'})
+        }
+
+      }
+
+
+    })
+  </script>
+
+</body></html>
