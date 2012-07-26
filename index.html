@@ -1,6 +1,6 @@
-<html lang="en-US"><head>
+<html lang="en-US">
+<head>
   <meta charset="UTF-8">
-  <title></title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -10,6 +10,7 @@
   <figure id="figure">
     <i class="box"></i>
   </figure>
+
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function(){
@@ -31,6 +32,7 @@
         event.preventDefault();
         startX = event.originalEvent.touches[0].pageX;
         startY = event.originalEvent.touches[0].pageY;
+        $box.removeClass('animating');
       });
 
       // Touch move
@@ -38,21 +40,32 @@
         event.preventDefault();
         currentX = event.originalEvent.touches[0].pageX;
         currentY = event.originalEvent.touches[0].pageY;
+        calculateDeltas();
+        updatePosition();
       });
 
       // Touch end
       $(document).live('touchend', function(event){
         event.preventDefault();
+        $box.addClass('animating');
         calculateAngle();
       });
 
-      // Calculate angle
-      function calculateAngle(){
+      // Calculate deltas
+      function calculateDeltas(){
         deltaX = startX - currentX;
         deltaY = startY - currentY;
+      }
+      // Calculate angle
+      function calculateAngle(){
         angle = Math.round(Math.atan2(deltaY,deltaX) * 180/Math.PI); // Magic math!
         angle < 0 ? angle = 360 - Math.abs(angle) : angle;
-        detectDirection(angle);
+        detectDirection();
+      }
+
+      // Realtime position change
+      function updatePosition(){
+        $box.css({'-webkit-transform' : 'rotateY(' + (rotateY + (-deltaX/5)) + 'deg)'})
       }
 
       // Detect direction

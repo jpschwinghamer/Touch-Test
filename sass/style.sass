@@ -6,7 +6,7 @@ $figure-size: 320px/2
 body
   +box-sizing(border-box)
   -webkit-user-select: none
-  
+
 figure
   width: $figure-size
   height: $figure-size
@@ -24,6 +24,7 @@ figure
   background: red
   position: absolute
   +box-shadow(inset 1px 1px 1px -1px rgba(0,0,0,0.5), inset -1px -1px 1px -1px rgba(0,0,0,0.5))
-  +transition(all 1s ease-in-out)
   +transform-style(preserve-3d)
+  &.animating
+    +transition(all 0.5s ease)
 
