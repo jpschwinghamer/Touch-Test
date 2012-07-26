@@ -32,7 +32,7 @@
         event.preventDefault();
         startX = event.originalEvent.touches[0].pageX;
         startY = event.originalEvent.touches[0].pageY;
-        $box.removeClass('animating');
+        $box.removeClass('animated');
       });
 
       // Touch move
@@ -47,7 +47,7 @@
       // Touch end
       $(document).live('touchend', function(event){
         event.preventDefault();
-        $box.addClass('animating');
+        $box.addClass('animated');
         calculateAngle();
       });
 
