@@ -71,30 +71,24 @@
       // Detect direction
       function detectDirection(){
         if((angle >= 0 && angle <= 45) || (angle <= 360 && angle >= 315)) {
-          console.log('left');
-          $box.css({'background' : 'blue', '-webkit-transform': 'rotateY(' + (rotateY-=180) + 'deg)'});
+          $box.css({'-webkit-transform': 'rotateY(' + (rotateY-=180) + 'deg)'});
         }
 
         if(angle >= 135 && angle <= 225) {
-          console.log('right');
-          $box.css({'background' : 'green', '-webkit-transform': 'rotateY(' + (rotateY+=180) + 'deg)'})
+          $box.css({'-webkit-transform': 'rotateY(' + (rotateY+=180) + 'deg)'})
 
         }
 
         if(angle >= 46 && angle <= 134) {
-          console.log('top');
-          $box.css({'background' : 'purple', '-webkit-transform': 'rotateX(' + (rotateY-=180) + 'deg)'})
+          console.log('up');
         }
 
         if(angle >= 226 && angle <= 314) {
-          console.log('bottom');
-          $box.css({'background' : 'yellow', '-webkit-transform': 'rotateX(' + (rotateY+=180) + 'deg)'})
+          console.log('down');
         }
-
       }
-
-
     })
   </script>
 
-</body></html>
+</body>
+</html>
