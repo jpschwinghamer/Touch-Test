@@ -36,6 +36,11 @@
 
         //////// Events
 
+        // Disable page touch events
+        $('body').live('touchstart', function(event){
+          event.preventDefault();
+        })
+
         // Touch start
         $box.live('touchstart', function(event){
           event.preventDefault();
