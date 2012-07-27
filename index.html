@@ -16,78 +16,105 @@
   <script type="text/javascript">
     $(document).ready(function(){
 
-      var   $box = $('.box'),
-            startX,
-            startY,
-            currentX,
-            currentY,
-            deltaX,
-            deltaY,
-            angle,
-            direction,
-            rotateY = 0,
-            rotateX = 0;
+      $('.box').each(function(){
 
-      // Touch start
-      $(document).live('touchstart', function(event){
-        event.preventDefault();
-        startX = event.originalEvent.touches[0].pageX;
-        startY = event.originalEvent.touches[0].pageY;
-        $box.removeClass('animated');
-      });
+        //////// Data
+        var   $box = $(this),
+              $side = $('.side', $box),
+              $front = $('.front', $box),
+              $back = $('.back', $box),
+              startX,
+              startY,
+              currentX,
+              currentY,
+              deltaX,
+              deltaY,
+              angle,
+              direction,
+              rotateY = 0,
+              rotateX = 0;
 
-      // Touch move
-      $(document).live('touchmove', function(event){
-        event.preventDefault();
-        currentX = event.originalEvent.touches[0].pageX;
-        currentY = event.originalEvent.touches[0].pageY;
-        calculateDeltas();
-        updatePosition();
-      });
+        //////// Events
 
-      // Touch end
-      $(document).live('touchend', function(event){
-        event.preventDefault();
-        $box.addClass('animated');
-        calculateAngle();
-      });
+        // Touch start
+        $box.live('touchstart', function(event){
+          event.preventDefault();
+          startX = event.originalEvent.touches[0].pageX;
+          startY = event.originalEvent.touches[0].pageY;
+          $box.removeClass('animating');
+        });
 
-      // Calculate deltas
-      function calculateDeltas(){
-        deltaX = startX - currentX;
-        deltaY = startY - currentY;
-      }
-      // Calculate angle
-      function calculateAngle(){
-        angle = Math.round(Math.atan2(deltaY,deltaX) * 180/Math.PI); // Magic math!
-        angle < 0 ? angle = 360 - Math.abs(angle) : angle;
-        detectDirection();
-      }
+        // Touch move
+        $box.live('touchmove', function(event){
+          event.preventDefault();
+          currentX = event.originalEvent.touches[0].pageX;
+          currentY = event.originalEvent.touches[0].pageY;
+          calculateDeltas();
+          updatePosition();
+        });
 
-      // Realtime position change
-      function updatePosition(){
-        $box.css({'-webkit-transform' : 'rotateY(' + (rotateY + (-deltaX/2)) + 'deg)'})
-      }
+        // Touch end
+        $box.live('touchend', function(event){
+          event.preventDefault();
+          $side.addClass('animating');
+          calculateAngle();
+        });
 
-      // Detect direction
-      function detectDirection(){
-        if((angle >= 0 && angle <= 45) || (angle <= 360 && angle >= 315)) {
-          $box.css({'-webkit-transform': 'rotateY(' + (rotateY-=180) + 'deg)'});
+        // Transition end
+        $side.live('webkitTransitionEnd', function(event){
+          $(this).removeClass('animating')
+        })
+
+        //////// Utility Functions
+
+        // Calculate deltas
+        function calculateDeltas(){
+          deltaX = startX - currentX;
+          deltaY = startY - currentY;
         }
 
-        if(angle >= 135 && angle <= 225) {
-          $box.css({'-webkit-transform': 'rotateY(' + (rotateY+=180) + 'deg)'})
-
+        // Calculate angle
+        function calculateAngle(){
+          angle = Math.round(Math.atan2(deltaY,deltaX) * 180/Math.PI); // Magic math!
+          angle < 0 ? angle = 360 - Math.abs(angle) : angle;
+          detectDirection();
         }
 
-        if(angle >= 46 && angle <= 134) {
-          console.log('up');
+        // Realtime position change
+        function updatePosition(){
+          $front.css({'-webkit-transform' : 'translateZ(0) rotateY(' + (rotateY - (deltaX/2)) + 'deg)'});
+          $back.css({'-webkit-transform' : 'translateZ(0) rotateY(' + (rotateY - (deltaX/2) - 180) + 'deg)'});
         }
 
-        if(angle >= 226 && angle <= 314) {
-          console.log('down');
+        // Detect direction
+        function detectDirection(){
+          if((angle >= 0 && angle <= 90) || (angle <= 360 && angle >= 315)) {
+            $front.css({'-webkit-transform': 'translateZ(0) rotateY(' + (rotateY-=180) + 'deg)'});
+            $back.css({'-webkit-transform': 'translateZ(0) rotateY(' + (rotateY-180) + 'deg)'});
+          }
+
+          if(angle >= 91 && angle <= 314) {
+            // $front.css({'-webkit-transform': 'rotateY(' + (rotateY+=180) + 'deg)'})
+            $front.css({'-webkit-transform': 'translateZ(0) rotateY(' + (rotateY+=180) + 'deg)'});
+            $back.css({'-webkit-transform': 'translateZ(0) rotateY(' + (rotateY-180) + 'deg)'});
+          }
+
+          // If you want vertical flipping too, do stuff here
+          // if(angle >= 46 && angle <= 134) {
+          //   console.log('up');
+          // }
+          //
+          // if(angle >= 226 && angle <= 314) {
+          //   console.log('down');
+          // }
         }
-      }
+
+
+      })
+
+
+
+
     })
   </script>
 
