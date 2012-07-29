@@ -7,20 +7,27 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link href="css/style.css" media="screen, projection" rel="stylesheet" type="text/css">
 </head>
+
 <body>
-  <figure class="box">
-    <i class="side front"></i>
-    <i class="side back"></i>
-  </figure>
+  <div class="box-context">
+    <figure class="box">
+      <i class="side front"></i>
+      <i class="side back"></i>
+    </figure>
+  </div>
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function(){
 
-      $('.box').each(function(){
+      //////// Global variables
+      var $body = $('body');
+
+      //////// Grab all box-contexts
+      $('.box-context').each(function(){
 
         //////// Data
-        var   $box = $(this),
+        var   $box = $('.box', this),
               $side = $('.side', $box),
               $front = $('.front', $box),
               $back = $('.back', $box),
@@ -38,7 +45,7 @@
         //////// Events
 
         // Disable page touch events
-        $('body').live('touchstart', function(event){
+        $body.live('touchstart', function(event){
           event.preventDefault();
         })
 
@@ -47,7 +54,6 @@
           event.preventDefault();
           startX = event.originalEvent.touches[0].pageX;
           startY = event.originalEvent.touches[0].pageY;
-          $box.removeClass('animating');
         });
 
         // Touch move
@@ -62,13 +68,13 @@
         // Touch end
         $box.live('touchend', function(event){
           event.preventDefault();
-          $side.addClass('animating');
+          $box.addClass('animating');
           calculateAngle();
         });
 
         // Transition end
-        $side.live('webkitTransitionEnd', function(event){
-          $(this).removeClass('animating')
+        $box.live('webkitTransitionEnd', function(event){
+          $(this).removeClass('animating');
         })
 
         //////// Utility Functions
@@ -82,44 +88,35 @@
         // Calculate angle
         function calculateAngle(){
           angle = Math.round(Math.atan2(deltaY,deltaX) * 180/Math.PI); // Magic math!
-          angle < 0 ? angle = 360 - Math.abs(angle) : angle;
+          angle < 0 ? angle = 360 - Math.abs(Math.floor(angle)) : angle;
           detectDirection();
         }
 
         // Realtime position change
         function updatePosition(){
-          $front.css({'-webkit-transform' : 'translateZ(0) rotateY(' + (rotateY - (deltaX/2)) + 'deg)'});
-          $back.css({'-webkit-transform' : 'translateZ(0) rotateY(' + (rotateY - (deltaX/2) - 180) + 'deg)'});
+          $box.css({'-webkit-transform' : 'translateZ(0) rotateY(' + (rotateY - (deltaX/2)) + 'deg) rotateX(' + (rotateX + (deltaY/2)) + 'deg)'});
         }
 
         // Detect direction
         function detectDirection(){
-          if((angle >= 0 && angle <= 90) || (angle <= 360 && angle >= 315)) {
-            $front.css({'-webkit-transform': 'translateZ(0) rotateY(' + (rotateY-=180) + 'deg)'});
-            $back.css({'-webkit-transform': 'translateZ(0) rotateY(' + (rotateY-180) + 'deg)'});
+          if((angle >= 0 && angle <= 45) || (angle <= 360 && angle >= 315)) {
+            $box.css({'-webkit-transform' : 'translateZ(0) rotateY(' + (rotateY-=180) + 'deg) rotateX(' + rotateX + 'deg)'});
           }
 
-          if(angle >= 91 && angle <= 314) {
-            // $front.css({'-webkit-transform': 'rotateY(' + (rotateY+=180) + 'deg)'})
-            $front.css({'-webkit-transform': 'translateZ(0) rotateY(' + (rotateY+=180) + 'deg)'});
-            $back.css({'-webkit-transform': 'translateZ(0) rotateY(' + (rotateY-180) + 'deg)'});
+          if(angle >= 135 && angle <= 225) {
+            $box.css({'-webkit-transform' : 'translateZ(0) rotateY(' + (rotateY+=180) + 'deg) rotateX(' + rotateX + 'deg)'});
           }
 
-          // If you want vertical flipping too, do stuff here
-          // if(angle >= 46 && angle <= 134) {
-          //   console.log('up');
-          // }
-          //
-          // if(angle >= 226 && angle <= 314) {
-          //   console.log('down');
-          // }
+          if(angle >= 46 && angle <= 134) {
+            $box.css({'-webkit-transform' : 'translateZ(0) rotateY(' + rotateY + 'deg) rotateX(' + (rotateX+=180) + 'deg)'});
+          }
+
+          if(angle >= 226 && angle <= 314) {
+            $box.css({'-webkit-transform' : 'translateZ(0) rotateY(' + rotateY + 'deg) rotateX(' + (rotateX-=180) + 'deg)'});
+          }
         }
 
-
       })
-
-
-
 
     })
   </script>
