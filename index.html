@@ -18,10 +18,15 @@
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script type="text/javascript">
-    $(document).ready(function(){
+    //////// Global vars
+    var $document = $(document);
 
-      //////// Global variables
-      var $body = $('body');
+    //////// Document ready to roll
+    $document.ready(function(){
+
+      $document.live('touchmove', function(event){
+        event.preventDefault();
+      })
 
       //////// Grab all box-contexts
       $('.box-context').each(function(){
@@ -43,11 +48,6 @@
               rotateX = 0;
 
         //////// Events
-
-        // Disable page touch events
-        $body.live('touchstart', function(event){
-          event.preventDefault();
-        })
 
         // Touch start
         $box.live('touchstart', function(event){
